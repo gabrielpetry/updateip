@@ -55,7 +55,7 @@ class update_ip:
             lambda x: x['name'] == self.cloudflare_dns_entry,
             entries['result']))
 
-        if entry[0]:
+        if entry and entry[0]:
             return entry[0]
 
         return False
@@ -82,7 +82,6 @@ class update_ip:
     def change_dns(self):
         entry_exists = self.check_if_entry_exists()
 
-        print(entry_exists)
         if entry_exists:
             self.entry_id = entry_exists['id']
             return self.update_entry()
