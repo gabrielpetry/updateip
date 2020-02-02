@@ -94,16 +94,17 @@ if __name__ == "__main__":
 
     load_dotenv()
 
-    cloudflare = update_ip(
-        os.getenv('cloudflare_api'),
-        os.getenv('cloudflare_email'),
-        os.getenv('cloudflare_entry'),
-        os.getenv('cloudflare_domain'),
-        os.getenv('cloudflare_zone_id'),
-        os.getenv('logpath')
-    )
+    for entry in os.getenv('cloudflare_entry').split(','):
+        cloudflare = update_ip(
+            os.getenv('cloudflare_api'),
+            os.getenv('cloudflare_email'),
+            entry,
+            os.getenv('cloudflare_domain'),
+            os.getenv('cloudflare_zone_id'),
+            os.getenv('logpath')
+        )
+        print(cloudflare.change_dns().json())
 
-    print(cloudflare.change_dns().json())
 
     # print(cloudflare.get_external_ip())
     # print(cloudflare.entryExists())
