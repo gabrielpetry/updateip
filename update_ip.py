@@ -1,7 +1,6 @@
 #!/bin/python
-
-#
 import requests, json, os
+import netifaces as ni
 from dotenv import load_dotenv
 
 
@@ -15,12 +14,22 @@ class update_ip:
     cloudflare_api_base = "https://api.cloudflare.com/client/v4/zones/"
     logfile           = ""
     external_ip       = ""
-    last_external_ip  = ""
     headers           = {}
     entry_id          = ""
+    ttl               = 120
+    proxied           = False
+    interface         = "external"
 
-
-    def __init__(self, token, email, entry, domain, zone_id, logfile):
+    def __init__(self,
+                token,
+                email,
+                entry,
+                domain,
+                zone_id,
+                logfile,
+                interface,
+                ttl,
+                proxied):
         self.cloudflare_token = token
         self.cloudflare_email = email
         self.cloudflare_entry = entry
@@ -28,11 +37,26 @@ class update_ip:
         self.cloudflare_dns_entry = entry + "." + domain
         self.cloudflare_api_base += zone_id
         self.cloudflare_zone_id = zone_id
+        self.ttl = ttl or 120
+        self.interface = interface or "external"
 
-        self.external_ip = self.get_external_ip()
+        if proxied and proxied.lower() == "true":
+            self.proxied = True
+        else:
+            self.proxied = False
+
+        if interface is None or interface == 'external':
+            self.external_ip = self.get_external_ip()
+        else:
+            self.external_ip = self.get_interface_ip(interface)
 
     def get_external_ip(self):
         return requests.get('http://ifconfig.me').text
+
+    def get_interface_ip(self, interface):
+        print(ni.ifaddresses(interface))
+        return ni.ifaddresses(interface)[ni.AF_INET][0]['addr']
+
 
     def request(self, method, endpoint, data={}):
         headers = {
@@ -65,8 +89,8 @@ class update_ip:
             "type": "A",
             "name": self.cloudflare_dns_entry,
             "content": self.external_ip,
-            "ttl": 120,
-            "proxied": False
+            "ttl": self.ttl,
+            "proxied": self.proxied
             })
 
 
@@ -75,12 +99,16 @@ class update_ip:
             "type": "A",
             "name": self.cloudflare_dns_entry,
             "content": self.external_ip,
-            "ttl": 120,
-            "proxied": False
+            "ttl": self.ttl,
+            "proxied": self.proxied
         })
 
     def change_dns(self):
         entry_exists = self.check_if_entry_exists()
+        print("Changing DNS entry for " + self.cloudflare_dns_entry)
+        print("Current IP: " + self.external_ip)
+        print("Interface IP: " + self.interface)
+
 
         if entry_exists:
             self.entry_id = entry_exists['id']
@@ -95,18 +123,19 @@ if __name__ == "__main__":
     load_dotenv()
 
     for entry in os.getenv('cloudflare_entry').split(','):
+        print("entry: " + entry)
+        print(os.getenv(entry + "_interface"),)
         cloudflare = update_ip(
-            os.getenv('cloudflare_api'),
-            os.getenv('cloudflare_email'),
-            entry,
-            os.getenv('cloudflare_domain'),
-            os.getenv('cloudflare_zone_id'),
-            os.getenv('logpath')
+            token=os.getenv('cloudflare_api'),
+            email=os.getenv('cloudflare_email'),
+            entry=entry,
+            domain=os.getenv('cloudflare_domain'),
+            zone_id=os.getenv('cloudflare_zone_id'),
+            logfile=os.getenv('logpath'),
+            interface=os.getenv(entry + "_interface"),
+            ttl=os.getenv(entry + "_ttl"),
+            proxied=os.getenv(entry + "_proxied")
         )
+
         print(cloudflare.change_dns().json())
 
-
-    # print(cloudflare.get_external_ip())
-    # print(cloudflare.entryExists())
-    # print(cloudflare.check_if_entry_exists())
-    # cloudflare.create_entry();
