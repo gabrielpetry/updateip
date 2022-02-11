@@ -1,7 +1,6 @@
 #!/bin/bash
 
-
-cd "$(readlink -f \"$0\")" || exit 1
+cd "$(dirname $0)" || exit 1
 
 git pull origin master
 
