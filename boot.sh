@@ -8,7 +8,7 @@ if python --version | grep -q " 3."; then
     python="python"
 fi
 
-cd "$(readlink -f \"$0\")" || exit 1
+cd "$(dirname $0)" || exit 1
 
 if ! test -f .env; then
     echo " NO ENV FILE "
