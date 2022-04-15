@@ -1,7 +1,16 @@
 #!/bin/bash
 
+lock_file="/tmp/update_ip.lock"
+
+if test -f "lock_file"; then
+    echo "already running"
+    exit 0
+fi
+
 pip="pip3"
 python="python3"
+
+touch "lock_file"
 
 if python --version | grep -q " 3."; then
     pip="pip"
@@ -36,3 +45,7 @@ else
     echo "Creating cron job"
     (crontab -l 2>/dev/null || true; echo "*/5 * * * * $PWD/boot.sh") | crontab -
 fi
+
+
+rm "$lock_file"
+exit 0
