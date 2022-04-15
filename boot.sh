@@ -31,6 +31,8 @@ $pip install -r requirements.txt
 $python update_ip.py
 
 if crontab -l | grep -q update_ip; then
+    echo "cron created"
+else
     echo "Creating cron job"
     (crontab -l 2>/dev/null || true; echo "*/5 * * * * $PWD/boot.sh") | crontab -
 fi
