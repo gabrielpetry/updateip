@@ -2,15 +2,15 @@
 
 lock_file="/tmp/update_ip.lock"
 
-if test -f "lock_file"; then
+if test -f "$lock_file"; then
     echo "already running"
-    exit 0
+    exit 1
 fi
 
 pip="pip3"
 python="python3"
 
-touch "lock_file"
+touch "$lock_file"
 
 if python --version | grep -q " 3."; then
     pip="pip"
