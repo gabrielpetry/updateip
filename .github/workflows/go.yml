@@ -1,0 +1,28 @@
+name: Go
+
+on:  
+  push:
+    tags:
+      - '*'
+
+
+# workflow tasks
+jobs:
+  generate:
+    name: Generate cross-platform builds
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v2
+      - name: Generate build files
+        uses: thatisuday/go-cross-build@v1
+        with:
+            platforms: 'linux/amd64, linux/arm, linux/arm64'
+            package: 'main'
+            name: 'updateip'
+            dest: 'build'
+      - name: Upload artifacts
+      - uses: actions/upload-artifact@v3
+        with:
+          name: binaries
+          path: dist/updateip*
