@@ -1,0 +1,18 @@
+# /etc/update_ip/
+Log:
+  Level: info
+  Path: /tmp/update_ip.log
+
+Provider:
+  Cloudflare:
+    APIKey: ""
+    APIEmail: ""
+    Hostname: ""
+
+Ifaces:
+  Regex:
+    Name: "en0"
+    Addr: "192.168.*"
+    AutoRegister: True # will register all Interfaces that were found
+
+output: bash
