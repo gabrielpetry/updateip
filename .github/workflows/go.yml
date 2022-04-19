@@ -15,13 +15,21 @@ jobs:
       - name: Checkout the repository
         uses: actions/checkout@v2
 
-      - name: Generate build files
-        uses: thatisuday/go-cross-build@v1
+      - name: Setup Go
+        uses: actions/setup-go@v2
         with:
-            platforms: 'linux/amd64, linux/arm, linux/arm64'
-            package: 'main.go'
-            name: 'updateip'
-            dest: 'build'
+         go-version: '1.18.1' # The Go version to download (if necessary) and use.
+
+      - name: Install dependencies
+        run: |
+          go version
+          go mod download
+
+      - name: Build arm
+        run: |
+          export GOARCH=arm
+          export GOARM=7
+          go build -buildmode exe -o build/updateip-linux-arm32 ./main.go
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
