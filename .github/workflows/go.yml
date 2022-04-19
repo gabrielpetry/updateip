@@ -8,12 +8,13 @@ on:
 
 # workflow tasks
 jobs:
-  generate:
+  build:
     name: Generate cross-platform builds
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v2
+
       - name: Generate build files
         uses: thatisuday/go-cross-build@v1
         with:
@@ -21,8 +22,9 @@ jobs:
             package: 'main'
             name: 'updateip'
             dest: 'build'
+
       - name: Upload artifacts
-      - uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v3
         with:
           name: binaries
           path: dist/updateip*
