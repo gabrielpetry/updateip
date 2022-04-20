@@ -40,15 +40,6 @@ jobs:
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          files: |
-            build/updateip-linux-amd64
-            build/updateip-linux-arm32
-            build/updateip-linux-arm64
-                
-      - name: Release
-        uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/')
-        with:
           tag_name: latest
           files: |
             build/updateip-linux-amd64
