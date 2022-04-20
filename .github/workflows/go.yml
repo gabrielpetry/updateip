@@ -27,12 +27,19 @@ jobs:
 
       - name: Build arm
         run: |
+          go build -buildmode exe -o build/updateip-linux-amd64 ./main.go
+
           export GOARCH=arm
           export GOARM=7
           go build -buildmode exe -o build/updateip-linux-arm32 ./main.go
+
+          export GOARCH=arm64
+          go build -buildmode exe -o build/updateip-linux-arm64 ./main.go
+
+
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
           name: binaries
-          path: dist/updateip*
+          path: build/updateip*
