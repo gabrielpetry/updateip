@@ -7,16 +7,17 @@ import (
 	"github.com/gabrielpetry/update_ip/config"
 	"github.com/gabrielpetry/update_ip/hosts"
 	"github.com/gabrielpetry/update_ip/iface"
+	"github.com/gabrielpetry/update_ip/lockfile"
 	"github.com/gabrielpetry/update_ip/providers"
 )
 
 const APPNAME = "update_ip"
 
 func main() {
-	fmt.Print("\033[H\033[2J") // clear terminal
+	lockfile.Lock()
+	defer lockfile.Unlock()
 
 	config := config.GetInstance()
-
 	iface := iface.Iface{}
 
 	ifaces, _ := iface.LocalAddresses()
