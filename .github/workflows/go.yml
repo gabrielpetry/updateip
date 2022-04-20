@@ -25,7 +25,7 @@ jobs:
           go version
           go mod download
 
-      - name: Build arm
+      - name: Build
         run: |
           go build -buildmode exe -o build/updateip-linux-amd64 ./main.go
 
