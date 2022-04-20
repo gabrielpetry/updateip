@@ -36,10 +36,11 @@ jobs:
           export GOARCH=arm64
           go build -buildmode exe -o build/updateip-linux-arm64 ./main.go
 
-
-
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v3
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
         with:
-          name: binaries
-          path: build/updateip*
+          files: |
+            build/updateip-linux-amd64
+            build/updateip-linux-arm32
+            build/updateip-linux-arm64
