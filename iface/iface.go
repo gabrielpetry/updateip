@@ -98,9 +98,13 @@ func (i *Iface) LocalAddresses() (entries []Iface, err error) {
 
 	// usually en0 or eth0 will be added first, before tun or wlan,
 	// so we will return the first one as a .local, maybe a dump idea
-	ifaces = append(ifaces, Iface{
-		Name: getHostname() + ".local",
-		Addr: ifaces[0].Addr})
+	if len(ifaces) > 0 {
+		ifaces = append(ifaces, Iface{
+			Name: getHostname() + ".local",
+			Addr: ifaces[0].Addr})
+	} else {
+		fmt.Println("No interfaces found")
+	}
 
 	return ifaces, nil
 }
