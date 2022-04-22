@@ -31,7 +31,7 @@ jobs:
 
           export GOARCH=arm
           export GOARM=7
-          go build -buildmode exe -o build/updateip-linux-arm32 ./main.go
+          go build -buildmode exe -o build/updateip-linux-armhf ./main.go
 
           export GOARCH=arm64
           go build -buildmode exe -o build/updateip-linux-arm64 ./main.go
@@ -43,5 +43,5 @@ jobs:
           tag_name: latest
           files: |
             build/updateip-linux-amd64
-            build/updateip-linux-arm32
+            build/updateip-linux-armhf
             build/updateip-linux-arm64
