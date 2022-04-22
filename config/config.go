@@ -4,7 +4,6 @@ import (
 	"flag"
 	"fmt"
 	"log"
-	"os"
 	"sync"
 
 	"github.com/spf13/pflag"
@@ -44,10 +43,8 @@ func (c *Config) New() *Config {
 var singleInstance *Config
 
 var lock = &sync.Mutex{}
-var systemDir = "/etc/go-dhcpdump"
 
 func init() {
-	os.MkdirAll(systemDir, os.ModeDir)
 }
 
 func (c *Config) parseConfig() *Config {
