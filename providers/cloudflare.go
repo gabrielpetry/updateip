@@ -9,7 +9,7 @@ import (
 	"strings"
 
 	"github.com/cloudflare/cloudflare-go"
-	"github.com/gabrielpetry/update_ip/iface"
+	"github.com/gabrielpetry/updateip/iface"
 )
 
 const validTypes = "A" // A,AAAA,CNAME

@@ -10,7 +10,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/gabrielpetry/update_ip/config"
+	"github.com/gabrielpetry/updateip/config"
 )
 
 type Iface struct {

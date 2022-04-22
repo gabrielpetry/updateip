@@ -1,7 +1,7 @@
-# /etc/update_ip/
+# /etc/updateip/
 Log:
   Level: info
-  Path: /tmp/update_ip.log
+  Path: /tmp/updateip.log
 
 Provider:
   Cloudflare:

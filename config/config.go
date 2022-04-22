@@ -54,8 +54,8 @@ func (c *Config) parseConfig() *Config {
 	// viper config
 	viper.SetConfigName("config")
 	viper.SetConfigType("yaml")
-	viper.AddConfigPath("/etc/update_ip/")
-	viper.AddConfigPath("$HOME/.config/update_ip")
+	viper.AddConfigPath("/etc/updateip/")
+	viper.AddConfigPath("$HOME/.config/updateip")
 	viper.AddConfigPath(".")
 
 	err := viper.ReadInConfig() // Find and read the config file

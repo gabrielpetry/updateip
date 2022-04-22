@@ -4,14 +4,14 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/gabrielpetry/update_ip/config"
-	"github.com/gabrielpetry/update_ip/hosts"
-	"github.com/gabrielpetry/update_ip/iface"
-	"github.com/gabrielpetry/update_ip/lockfile"
-	"github.com/gabrielpetry/update_ip/providers"
+	"github.com/gabrielpetry/updateip/config"
+	"github.com/gabrielpetry/updateip/hosts"
+	"github.com/gabrielpetry/updateip/iface"
+	"github.com/gabrielpetry/updateip/lockfile"
+	"github.com/gabrielpetry/updateip/providers"
 )
 
-const APPNAME = "update_ip"
+const APPNAME = "updateip"
 
 func main() {
 	lockfile.Lock()

@@ -6,7 +6,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/gabrielpetry/update_ip/providers"
+	"github.com/gabrielpetry/updateip/providers"
 )
 
 func filter(ss []string, test func(string) bool) (ret []string) {
