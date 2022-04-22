@@ -27,14 +27,14 @@ jobs:
 
       - name: Build
         run: |
-          go build -buildmode exe -o build/updateip-linux-amd64 ./main.go
+          go build -buildmode exe -o build/updateip-linux-x86_64 ./main.go
 
           export GOARCH=arm
           export GOARM=7
-          go build -buildmode exe -o build/updateip-linux-armhf ./main.go
+          go build -buildmode exe -o build/updateip-linux-armv7l ./main.go
 
           export GOARCH=arm64
-          go build -buildmode exe -o build/updateip-linux-arm64 ./main.go
+          go build -buildmode exe -o build/updateip-linux-aarch64 ./main.go
 
       - name: Release
         uses: softprops/action-gh-release@v1
@@ -42,6 +42,6 @@ jobs:
         with:
           tag_name: latest
           files: |
-            build/updateip-linux-amd64
-            build/updateip-linux-armhf
-            build/updateip-linux-arm64
+            build/updateip-linux-x86_64
+            build/updateip-linux-armv7l
+            build/updateip-linux-aarch64
