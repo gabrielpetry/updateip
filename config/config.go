@@ -15,6 +15,7 @@ type Config struct {
 		Level string
 		Path  string
 	}
+
 	Provider struct {
 		Cloudflare struct {
 			APIKey   string
@@ -33,6 +34,9 @@ type Config struct {
 			Addr string
 		}
 	}
+
+	Readonly bool
+
 	Output string
 }
 

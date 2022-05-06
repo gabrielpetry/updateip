@@ -1,4 +1,5 @@
 # /etc/updateip/
+Readonly: true
 Log:
   Level: info
   Path: /tmp/updateip.log

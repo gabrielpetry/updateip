@@ -13,19 +13,39 @@ import (
 
 const APPNAME = "updateip"
 
+var conf = config.GetInstance()
+
 func main() {
 	lockfile.Lock()
 	defer lockfile.Unlock()
 
-	config := config.GetInstance()
-	iface := iface.Iface{}
-
-	ifaces, _ := iface.LocalAddresses()
 	c := providers.Cloudflare{}
 	c.New(
-		config.Provider.Cloudflare.APIKey,
-		config.Provider.Cloudflare.APIEmail,
-		config.Provider.Cloudflare.Hostname)
+		conf.Provider.Cloudflare.APIKey,
+		conf.Provider.Cloudflare.APIEmail,
+		conf.Provider.Cloudflare.Hostname)
+
+	if !conf.Readonly {
+		fmt.Println("updating cloudflare entries")
+		Cloudflare(&c)
+	}
+
+	fmt.Println("updating hosts file")
+	c.GetDnsEntries()
+	err := hosts.Save(c.DnsEntries)
+	if err != nil {
+		fmt.Println(err)
+	}
+}
+
+func PrintJson(v interface{}) {
+	c, _ := json.MarshalIndent(v, "", "  ")
+	fmt.Println(string(c))
+}
+
+func Cloudflare(c *providers.Cloudflare) {
+	iface := iface.Iface{}
+	ifaces, _ := iface.LocalAddresses()
 
 	external, _ := iface.ExternalAddress()
 	ifaces = append(ifaces, external)
@@ -38,16 +58,4 @@ func main() {
 			fmt.Println("error creating entry:", err)
 		}
 	}
-
-	c.GetDnsEntries()
-
-	err := hosts.Save(c.DnsEntries)
-	if err != nil {
-		fmt.Println(err)
-	}
-}
-
-func PrintJson(v interface{}) {
-	c, _ := json.MarshalIndent(v, "", "  ")
-	fmt.Println(string(c))
 }
