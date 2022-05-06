@@ -44,11 +44,24 @@ func PrintJson(v interface{}) {
 }
 
 func Cloudflare(c *providers.Cloudflare) {
-	iface := iface.Iface{}
-	ifaces, _ := iface.LocalAddresses()
+	fmt.Println("updating cloudflare entries")
+	iff := iface.Iface{}
+	ifaces := []iface.Iface{}
 
-	external, _ := iface.ExternalAddress()
-	ifaces = append(ifaces, external)
+	if conf.Ifaces.Local {
+		localIff, _ := iff.LocalAddresses()
+		ifaces = append(ifaces, localIff...)
+	}
+
+	if conf.Ifaces.External {
+		external, _ := iff.ExternalAddress()
+		ifaces = append(ifaces, external)
+	}
+
+	if len(ifaces) == 0 {
+		fmt.Println("no interfaces to update")
+		return
+	}
 
 	dnsEntries := c.IfaceToDnsEntry(ifaces)
 

@@ -1,5 +1,4 @@
 # /etc/updateip/
-Readonly: true
 Log:
   Level: info
   Path: /tmp/updateip.log
@@ -10,7 +9,11 @@ Provider:
     APIEmail: ""
     Hostname: ""
 
+Readonly: false
 Ifaces:
+  External: true
+  Local: false
+
   Regex:
     Name: "en0"
     Addr: "192.168.*"

@@ -23,12 +23,11 @@ type Config struct {
 			Hostname string
 		}
 	}
-	// Entries []struct {
-	// 	Entry     string
-	// 	Proxied   bool
-	// 	Interface string
-	// }
+
 	Ifaces struct {
+		External bool
+		Local    bool
+
 		Regex struct {
 			Name string
 			Addr string
