@@ -9,6 +9,9 @@ import (
 	"github.com/gabrielpetry/updateip/providers"
 )
 
+var startIdentifier = "##### bypass cloudflare dns #####"
+var endIdentifier = "##### End bypass #####"
+
 func filter(ss []string, test func(string) bool) (ret []string) {
 	for _, s := range ss {
 		if test(s) {
@@ -37,10 +40,24 @@ func Save(entries []providers.DnsEntry) error {
 
 	// remove any old key from domains
 	for _, entry := range entries {
-		hosts = filter(hosts, func(s string) bool { return !strings.Contains(s, entry.Host) })
+		hosts = filter(hosts, func(s string) bool {
+			if strings.Contains(s, entry.Host) {
+				return false
+			}
+
+			if strings.Contains(s, endIdentifier) {
+				return false
+			}
+
+			if strings.Contains(s, startIdentifier) {
+				return false
+			}
+
+			return true
+		})
 	}
 
-	hosts = append(hosts, "\n##### bypass cloudflare dns #####")
+	hosts = append(hosts, "\n#"+startIdentifier)
 
 	for _, entry := range entries {
 		if entry.Entry != "" {
@@ -55,7 +72,7 @@ func Save(entries []providers.DnsEntry) error {
 		hosts = append(hosts, fmt.Sprintf("%s\t\t%s%s # %v", entry.Target, entry.Entry, entry.Host, proxied))
 	}
 
-	hosts = append(hosts, "##### End bypass #####\n")
+	hosts = append(hosts, endIdentifier+"\n")
 	data := []byte(strings.Join(hosts, "\n"))
 	fmt.Print(string(data))
 	return os.WriteFile("/etc/hosts", data, 0644)
