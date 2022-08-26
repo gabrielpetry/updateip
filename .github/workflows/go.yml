@@ -1,10 +1,9 @@
 name: Go
 
-on:  
+on:
   push:
     tags:
-      - '*'
-
+      - "*"
 
 # workflow tasks
 jobs:
@@ -18,7 +17,7 @@ jobs:
       - name: Setup Go
         uses: actions/setup-go@v2
         with:
-         go-version: '1.18.1' # The Go version to download (if necessary) and use.
+          go-version: "1.18.1" # The Go version to download (if necessary) and use.
 
       - name: Install dependencies
         run: |
@@ -36,12 +35,13 @@ jobs:
           export GOARCH=arm64
           go build -buildmode exe -o build/updateip-linux-aarch64 ./main.go
 
+          find build -type f -exec tar -cf {}.tar {} \;
       - name: Release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
           tag_name: latest
           files: |
-            build/updateip-linux-x86_64
-            build/updateip-linux-armv7l
-            build/updateip-linux-aarch64
+            build/updateip-linux-x86_64.tar
+            build/updateip-linux-armv7l.tar
+            build/updateip-linux-aarch64.tar

@@ -53,7 +53,7 @@ func Save(entries []providers.DnsEntry) error {
 				return false
 			}
 
-			if  s == "" {
+			if s == "" {
 				return false
 			}
 
